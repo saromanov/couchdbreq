@@ -17,7 +17,6 @@ Couchdbreq.prototype.get = function(title, fn) {
             });
 
         } else {
-            console.log(response);
             fn("Path not found", '');
         }
     });
@@ -67,4 +66,3 @@ var getOptions = function(type, title, port) {
 };
 
 module.exports = Couchdbreq;
-
