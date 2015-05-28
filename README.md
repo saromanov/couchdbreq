@@ -20,6 +20,16 @@ cdb.get("item", function(error, response) {
 });
 ```
 
+Delete from the Couchdb
+```javascript 
+var cdb = new Couchdbreq("localhost", 5984);
+cdb.del("item", function(error, response) {
+    if (error)
+        return;
+});
+```
+
+
 # License
 MIT
 
