@@ -13,17 +13,17 @@ Couchdbreq.prototype.get = function(title, fn){
          response.setEncoding('utf-8');
          if(response.statusCode === 200) {
               response.on('data', function(res){
-                  fn('',res);
+                  fn('',response.statusCode, res);
              });
 
          }
          else {
-             fn("Path not found",'');
+             fn("Path not found",response.statusCode, '');
          }
      });
      getdata.shouldKeepAlive = false
      getdata.on('error', function(e){
-         fn(undefined, e);
+         fn(undefined, 404, e);
      });
      getdata.end();
 };
@@ -41,12 +41,12 @@ Couchdbreq.prototype.put = function(title, data, fn) {
     var post = http.request(options,function(request) {
         request.setEncoding('utf-8');
         request.on('data', function(res){
-           fn('', res);
+           fn('', request.statusCode, res);
         });
     });
 
     post.on('error', function(e) {
-        fn(e,'');
+        fn(e,404, '');
    });
     post.write(newdata);
     post.end();
@@ -56,10 +56,10 @@ Couchdbreq.prototype.put = function(title, data, fn) {
 Couchdbreq.prototype.del = function(title, fn){
    var deldata = http.request(getOptions('DELETE', title, this.port), function(response){
        if(response.statusCode === 200){
-           fn('', 'Document ' + title + ' was removed');
+           fn('', 200, 'Document ' + title + ' was removed');
        }
        else {
-           fn('Document ' + title + ' not found', '');
+           fn('Document ' + title + ' not found', response.statusCode, '');
 
        }
    });
@@ -71,4 +71,5 @@ var getOptions = function(type, title, port) {
 };
 
 module.exports = Couchdbreq;
+
 
