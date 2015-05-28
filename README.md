@@ -5,7 +5,7 @@ Very simple client to couchdb.
 Put to the Couchdb
 ```javascript
 var cdb = new Couchdbreq("localhost", 5984);
-cdb.put("item", {foo:"bar"}, function(err, response){
+cdb.put("item", {foo:"bar"}, function(err, statusCode, response){
     console.log(response);
 });
 ```
@@ -13,9 +13,10 @@ cdb.put("item", {foo:"bar"}, function(err, response){
 Get from the Couchdb
 ```javascript 
 var cdb = new Couchdbreq("localhost", 5984);
-cdb.get("item", function(error, response) {
-    if (error)
+cdb.get("item", function(error, statusCode, response) {
+    if (statusCode === 404){
         return;
+    }
     console.log(response);
 });
 ```
@@ -23,9 +24,11 @@ cdb.get("item", function(error, response) {
 Delete from the Couchdb
 ```javascript 
 var cdb = new Couchdbreq("localhost", 5984);
-cdb.del("item", function(error, response) {
-    if (error)
+cdb.del("item", function(error, statusCode, response) {
+    if (error){
+        console.log(error);
         return;
+    }
 });
 ```
 
