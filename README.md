@@ -21,6 +21,17 @@ cdb.get("item", function(error, statusCode, response) {
 });
 ```
 
+Get all documents
+```javascript
+var cdb = new Couchdbreq("localhost", 5984);
+cdb.get("item/_all_docs", function(error, statusCode, response) {
+    if (statusCode === 404){
+        return;
+    }
+    console.log(response);
+});
+```
+
 Delete from the Couchdb
 ```javascript 
 var cdb = new Couchdbreq("localhost", 5984);
