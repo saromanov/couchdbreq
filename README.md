@@ -5,7 +5,7 @@ Very simple client to couchdb.
 Put to the Couchdb
 ```javascript
 var cdb = new Couchdbreq("localhost", 5984);
-cdb.put("item", {foo:"bar"}, function(err, statusCode, response){
+cdb.insert("item", {foo:"bar"}, function(err, statusCode, response){
     console.log(response);
 });
 ```
