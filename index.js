@@ -29,6 +29,7 @@ Couchdbreq.prototype.get = function(title, fn) {
 
 //Store data to Couchdb
 Couchdbreq.prototype.insert = function(title, data, fn) {
+    if (data == undefined) return;
     var newdata = JSON.stringify(data);
     var options = {
         port: this.port,
