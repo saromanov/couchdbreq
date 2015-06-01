@@ -3,6 +3,10 @@ var querystring = require('querystring');
 
 
 var Couchdbreq = function(host, port) {
+    if(typeof host !== 'string')
+        throw "Host param must be string";
+    if (typeof port !== 'number')
+        throw "Port param must be number";
     this.host = host;
     this.port = port;
 };
@@ -29,7 +33,7 @@ Couchdbreq.prototype.get = function(title, fn) {
 
 //Store data to Couchdb
 Couchdbreq.prototype.insert = function(title, data, fn) {
-    if (data == undefined) return;
+    if (data === undefined) return;
     var newdata = JSON.stringify(data);
     var options = {
         port: this.port,
