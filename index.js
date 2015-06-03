@@ -2,69 +2,90 @@ var http = require('http');
 var querystring = require('querystring');
 
 
-var Couchdbreq = function(host, port) {
-    if(typeof host !== 'string'){
-        throw "Host param must be string";
+module.exports = function(opts) {
+    var opts = opts || {};
+    var host = opts.host;
+    var port = opts.port;
+    if (opts.host == undefined) {
+        host = 'localhost';
     }
-    if (typeof port !== 'number'){
-        throw "Port param must be number";
-    }
-    this.host = host;
-    this.port = port;
-};
 
-//Get data from Couchdb
-Couchdbreq.prototype.get = function(title, fn) {
-    var getdata = http.request(getOptions('GET', title, this.port), function(response) {
-        response.setEncoding('utf-8');
-        if (response.statusCode === 200) {
-            response.on('data', function(res) {
-                fn('', response.statusCode, res);
+    if (opts.port == undefined) {
+        port = 5984;
+    }
+
+    return {
+        get: function(title, fn) {
+            var getdata = http.request(getOptions('GET', title, port), function(response) {
+                response.setEncoding('utf-8');
+                if (response.statusCode === 200) {
+                    response.on('data', function(res) {
+                        fn('', response.statusCode, res);
+                    });
+
+                } else {
+                    if (fn === undefined) {
+                        return "Path not found";
+                    }
+                    fn("Path not found", response.statusCode);
+                }
+            });
+            getdata.shouldKeepAlive = false;
+            getdata.on('error', function(e) {
+                fn(undefined, 404, e);
+            });
+            getdata.end();
+
+        },
+
+        insert: function(title, data, fn) {
+            if (data === undefined) {
+                return;
+            }
+            var newdata = JSON.stringify(data);
+            var options = {
+                host: host,
+                port: port,
+                path: "/" + title,
+                method: 'POST',
+                headers: {
+                    accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Content-Length': newdata.length
+                }
+            };
+            create_base(title, port, function() {
+                var post = http.request(options, function(request) {
+                    request.setEncoding('utf-8');
+                    request.on('data', function(res) {
+                        fn('', request.statusCode, res);
+                    });
+                });
+                post.write(newdata);
+                post.end();
             });
 
-        } else {
-            fn("Path not found", response.statusCode);
-        }
-    });
-    getdata.shouldKeepAlive = false;
-    getdata.on('error', function(e) {
-        fn(undefined, 404, e);
-    });
-    getdata.end();
-};
+        },
 
-//Store data to Couchdb
-Couchdbreq.prototype.insert = function(title, data, fn) {
-    if (data === undefined){
-        return;
-    }
-    var newdata = JSON.stringify(data);
-    var options = {
-        host: this.host,
-        port: this.port,
-        path: "/" + title,
-        method: 'POST',
-        headers: {
-            accept: 'application/json',
-            'Content-Type': 'application/json',
-            'Content-Length': newdata.length
-        }
+        del: function(title, fn) {
+            var deldata = http.request(getOptions('DELETE', title, port), function(response) {
+                if (response.statusCode === 200) {
+                    fn('', 200, 'Document ' + title + ' was removed');
+                } else {
+                    fn('Document ' + title + ' not found', response.statusCode, '');
+
+                }
+            });
+            deldata.end();
+
+        },
+
     };
-    this._create_base(title, function() {
-        var post = http.request(options, function(request) {
-            request.setEncoding('utf-8');
-            request.on('data', function(res) {
-                fn('', request.statusCode, res);
-            });
-        });
-        post.write(newdata);
-        post.end();
-    });
 };
 
-Couchdbreq.prototype._create_base = function(title, fn) {
+var create_base = function(title, port, fn) {
     var options = {
-        port: this.port,
+        port: port,
         path: "/" + title,
         method: 'PUT',
         headers: {
@@ -83,21 +104,9 @@ Couchdbreq.prototype._create_base = function(title, fn) {
     post.end();
 };
 
-
-Couchdbreq.prototype.del = function(title, fn) {
-    var deldata = http.request(getOptions('DELETE', title, this.port), function(response) {
-        if (response.statusCode === 200) {
-            fn('', 200, 'Document ' + title + ' was removed');
-        } else {
-            fn('Document ' + title + ' not found', response.statusCode, '');
-
-        }
-    });
-    deldata.end();
-};
-
-var getOptions = function(type, title, port) {
+var getOptions = function(type, title, port, host) {
     return {
+        host: host,
         port: port,
         path: "/" + title,
         method: type,
@@ -107,5 +116,3 @@ var getOptions = function(type, title, port) {
     };
 };
 
-
-module.exports = Couchdbreq;
