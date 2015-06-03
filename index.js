@@ -3,10 +3,12 @@ var querystring = require('querystring');
 
 
 var Couchdbreq = function(host, port) {
-    if(typeof host !== 'string')
+    if(typeof host !== 'string'){
         throw "Host param must be string";
-    if (typeof port !== 'number')
+    }
+    if (typeof port !== 'number'){
         throw "Port param must be number";
+    }
     this.host = host;
     this.port = port;
 };
@@ -21,7 +23,7 @@ Couchdbreq.prototype.get = function(title, fn) {
             });
 
         } else {
-            fn("Path not found", response.statusCode, '');
+            fn("Path not found", response.statusCode);
         }
     });
     getdata.shouldKeepAlive = false;
@@ -33,9 +35,12 @@ Couchdbreq.prototype.get = function(title, fn) {
 
 //Store data to Couchdb
 Couchdbreq.prototype.insert = function(title, data, fn) {
-    if (data === undefined) return;
+    if (data === undefined){
+        return;
+    }
     var newdata = JSON.stringify(data);
     var options = {
+        host: this.host,
         port: this.port,
         path: "/" + title,
         method: 'POST',
@@ -46,7 +51,6 @@ Couchdbreq.prototype.insert = function(title, data, fn) {
         }
     };
     this._create_base(title, function() {
-        //Before insert, check db exist
         var post = http.request(options, function(request) {
             request.setEncoding('utf-8');
             request.on('data', function(res) {
@@ -90,7 +94,7 @@ Couchdbreq.prototype.del = function(title, fn) {
         }
     });
     deldata.end();
-}
+};
 
 var getOptions = function(type, title, port) {
     return {
