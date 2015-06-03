@@ -1,10 +1,14 @@
 # couchdbreq
 Very simple client to couchdb.
-# Usage
+
+## Install
+
+## Usage
 
 Put to the Couchdb
 ```javascript
-var cdb = new Couchdbreq("localhost", 5984);
+var cdb = require('couchdbreq')();
+//var cdb = require('couchdbreq')({host: "localhost", port: 5984});
 cdb.insert("item", {foo:"bar"}, function(err, statusCode, response){
     console.log(response);
 });
@@ -12,7 +16,6 @@ cdb.insert("item", {foo:"bar"}, function(err, statusCode, response){
 
 Get from the Couchdb
 ```javascript 
-var cdb = new Couchdbreq("localhost", 5984);
 cdb.get("item", function(error, statusCode, response) {
     if (statusCode === 404){
         return;
@@ -23,7 +26,6 @@ cdb.get("item", function(error, statusCode, response) {
 
 Get all documents
 ```javascript
-var cdb = new Couchdbreq("localhost", 5984);
 cdb.get("item/_all_docs", function(error, statusCode, response) {
     if (statusCode === 404){
         return;
@@ -32,9 +34,8 @@ cdb.get("item/_all_docs", function(error, statusCode, response) {
 });
 ```
 
-Delete from the Couchdb
+Delete operation
 ```javascript 
-var cdb = new Couchdbreq("localhost", 5984);
 cdb.del("item", function(error, statusCode, response) {
     if (error){
         console.log(error);
