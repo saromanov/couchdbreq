@@ -1,0 +1,26 @@
+{
+  "name": "couchdbreq",
+  "version": "0.0.1",
+  "description": "Very simple client to couchdb",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saromanov/couchdbreq.git"
+  },
+  "keywords": [
+    "couchdb"
+  ],
+  "author": "Sergey Romanov <xxsmotur@gmail.com> (https://github.com/saromanov)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/saromanov/couchdbreq/issues"
+  },
+  "homepage": "https://github.com/saromanov/couchdbreq",
+   "devDependencies": {
+    "mocha": "*"
+  }
+
+}
