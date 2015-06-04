@@ -8,6 +8,7 @@ Very simple client to couchdb.
 Put to the Couchdb
 ```javascript
 var cdb = require('couchdbreq')();
+//This is same as
 //var cdb = require('couchdbreq')({host: "localhost", port: 5984});
 cdb.insert("item", {foo:"bar"}, function(err, statusCode, response){
     console.log(response);
