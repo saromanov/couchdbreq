@@ -1,4 +1,4 @@
-# couchdbreq
+# couchdbreq [![Build Status](https://travis-ci.org/saromanov/couchdbreq.svg?branch=master)](https://travis-ci.org/saromanov/couchdbreq)
 Very simple client to couchdb.
 
 ## Install
