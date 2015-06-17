@@ -1,16 +1,51 @@
 var http = require('http');
-var querystring = require('querystring');
+
+
+
+var create_base = function(title, port, fn) {
+    var options = {
+        port: port,
+        path: "/" + title,
+        method: 'PUT',
+        headers: {
+            accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Content-Length': title.length
+        }
+    };
+
+    var post = http.request(options, function(request) {
+        request.setEncoding('utf-8');
+        request.on('data', function(res) {
+            fn('', request.statusCode, res);
+        });
+    });
+    post.end();
+};
+
+var getOptions = function(options) {
+    return {
+        host: options.host,
+        port: options.port,
+        path: "/" + options.title,
+        method: options.type,
+        headers: {
+            accept: 'application/json'
+        }
+    };
+};
+
 
 
 module.exports = function(opts) {
     var opts = opts || {};
     var host = opts.host;
     var port = opts.port;
-    if (opts.host == undefined) {
+    if (opts.host === undefined) {
         host = 'localhost';
     }
 
-    if (opts.port == undefined) {
+    if (opts.port === undefined) {
         port = 5984;
     }
 
@@ -80,39 +115,6 @@ module.exports = function(opts) {
 
         },
 
-    };
-};
-
-var create_base = function(title, port, fn) {
-    var options = {
-        port: port,
-        path: "/" + title,
-        method: 'PUT',
-        headers: {
-            accept: 'application/json',
-            'Content-Type': 'application/json',
-            'Content-Length': title.length
-        }
-    };
-
-    var post = http.request(options, function(request) {
-        request.setEncoding('utf-8');
-        request.on('data', function(res) {
-            fn('', request.statusCode, res);
-        });
-    });
-    post.end();
-};
-
-var getOptions = function(options) {
-    return {
-        host: options.host,
-        port: options.port,
-        path: "/" + options.title,
-        method: options.type,
-        headers: {
-            accept: 'application/json'
-        }
     };
 };
 
