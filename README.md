@@ -5,7 +5,7 @@ Very simple client to couchdb.
 
 ## Usage
 
-Put to the Couchdb
+Insert
 ```javascript
 var cdb = require('couchdbreq')();
 //This is same as
@@ -15,7 +15,7 @@ cdb.insert("item", {foo:"bar"}, function(err, statusCode, response){
 });
 ```
 
-Get from the Couchdb
+Getting data
 ```javascript 
 cdb.get("item", function(error, statusCode, response) {
     if (statusCode === 404){
@@ -35,7 +35,7 @@ cdb.get("item/_all_docs", function(error, statusCode, response) {
 });
 ```
 
-Delete operation
+Delete
 ```javascript 
 cdb.del("item", function(error, statusCode, response) {
     if (error){
