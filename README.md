@@ -2,6 +2,7 @@
 Very simple client to couchdb.
 
 ## Install
+``` npm install couchdbreq ```
 
 ## Usage
 
