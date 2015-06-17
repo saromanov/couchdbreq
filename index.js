@@ -16,7 +16,7 @@ module.exports = function(opts) {
 
     return {
         get: function(title, fn) {
-            var getdata = http.request(getOptions('GET', title, port), function(response) {
+            var getdata = http.request(getOptions({type: 'GET', title: title, port: port}), function(response) {
                 response.setEncoding('utf-8');
                 if (response.statusCode === 200) {
                     response.on('data', function(res) {
@@ -104,12 +104,12 @@ var create_base = function(title, port, fn) {
     post.end();
 };
 
-var getOptions = function(type, title, port, host) {
+var getOptions = function(options) {
     return {
-        host: host,
-        port: port,
-        path: "/" + title,
-        method: type,
+        host: options.host,
+        port: options.port,
+        path: "/" + options.title,
+        method: options.type,
         headers: {
             accept: 'application/json'
         }
